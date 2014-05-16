@@ -1,0 +1,27 @@
+#set( $layout = "layout/default.vm" )
+
+<div class="container">
+
+	<div class="container">
+    	<h2 class="featurette-heading muted">关于这个项目</h2>
+    	<p class="lead">这是一个基本的网站模版工程，使用了Spring MVC + Velocity + MyBatis。完成了最基本的用户注册登录功能（只有认证，没有授权）。目的在于可以通过这个模版工程快速搭建Web应用。</p>
+	<hr />
+	
+	<div class="container">
+    	<h2 class="featurette-heading muted">关于arganzheng</h2>
+        <div class="span5">
+            <img class="featurette-image pull-left img-polaroid" src="$request.getContextPath()/resources/reading/img/QGQM.png">
+    	</div>
+        <div class="span6">    
+        	<p class="lead">好读书，不求甚解，每有会意，便欣然忘食。</p>
+    		<ul>
+    			<li><a href="http://blog.arganzheng.me" target="_blank">My Blog: http://blog.arganzheng.me</a></li>
+            	<li><a href="http://weibo.com/argan1985">My Weibo: http://weibo.com/arganzheng</a></li>
+            	<li><a href="https://github.com/arganzheng">My Github: https://github.com/arganzheng</a></li>
+            	<li><a href="https://github.com/arganzheng">My Eemail: arganzheng@gmail.com</a></li>
+    		</ul>
+        </div>
+	</div>
+</div>
+
+

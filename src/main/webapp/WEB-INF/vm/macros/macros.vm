@@ -1,0 +1,153 @@
+#** -------------------------------------------
+ * 显示标题，如果未提供标题，则使用默认值
+ * -------------------------------------------- *#
+#macro (showTitle $defaultTitle)
+
+#if( $page.title != "" )
+<title>$page.title</title>
+#else
+<title>$!defaultTitle</title>
+#end
+
+#end
+
+#** -------------------------------------------
+ * 显示select box
+ * -------------------------------------------- *#
+#macro (select $name $map $selected $hint)
+
+#set ($_map = $map)
+#set ($_selected = $selected)
+<select name="$name">
+  <option value="">$hint</option>
+
+#foreach ($_key in $_map.keySet())
+  <option value="$_key" #if ($_key == $_selected) selected #end>$_map.get($_key)</option>
+#end
+
+</select>
+
+#end
+
+#** -------------------------------------------
+ * 显示错误信息
+ * -------------------------------------------- *#
+ #macro (errorMessage $field)
+    #if (!$field.valid) <div style="color: red; font-weight: bold;">$field.message</div> #end
+ #end
+ 
+## 生成script的html代码
+## $target 目标js文件的相对路径，相对于scripts 
+#macro(importScript $target )
+<script src='$!{scriptsServer}$!{target}?v=$!{buildVersion.version}' type="text/javascript" charset="iso-8859-1"></script>
+#end
+
+#macro (showBookOwnershipStatusForBorrower $status)
+	#if($status == "Lent")
+		<span class="label label-important">在读</span>
+	#elseif($status == "Return")
+		<span class="label label-success">已读</span>
+	#end
+#end
+
+#macro (showBookOwnershipStatus $status)
+	#if($status == "OnShelf")
+		<span class="label label-success">可借阅</span>
+	#elseif($status == "OffShelf")
+		<span class="label label-warning">下架</span>
+	#elseif($status == "Lent")
+		<span class="label label-important">借出</span>
+	#elseif($status == "Return")
+		<span class="label label-info">归还</span>
+	#else
+		<span class="label label-important">未知状态</span>
+	#end
+#end
+
+#macro (showBookOwnershipActionInner $status $bookOwnershipId)
+	#if($status == "OnShelf")
+		<a class="btn btn-small btn-success" onclick="lend($!bookOwnershipId);">借出</a>
+		<a class="btn btn-small btn-warning" onclick="offShelf($!bookOwnershipId);">下架 </a>
+		<a class="btn btn-small btn-danger" onclick="deleteBook($!bookOwnershipId);">删除</a>
+	#elseif($status == "OffShelf")
+		<a class="btn btn-small btn-success" onclick="onShelf($!bookOwnershipId);">上架 </a>
+		<a class="btn btn-small btn-danger" onclick="deleteBook($!bookOwnershipId);">删除</a>
+	#elseif($status == "Lent")
+		<a class="btn btn-small btn-success" onclick="confirmReturn($!bookOwnershipId);">确认归还 </a>
+	#end
+	#if($showSharingRecord)
+		<a class="btn btn-small btn-info" href="$request.getContextPath()/my/sharing?bookOwnershipId=$!bookOwnershipId" target="_blank">借阅记录</a>
+	#end
+#end
+
+#macro (showBookOwnershipAction $bookOwnership)
+	#set($status = $bookOwnership.status)
+	#set($bookOwnershipId = $bookOwnership.id)
+	
+	#showBookOwnershipActionInner($status, $bookOwnershipId)
+#end
+
+## velocity的$dateTool如果参数为null，居然是原样显示。。
+#macro(formatDate $date)
+	#if($date)
+	    $dateTool.format($date)
+	#end
+#end
+
+#macro(getLink $link)
+	#if($link && $link !="" )
+		$request.getContextPath()$!{link}
+	#elseif($request.getContextPath() && $request.getContextPath() !="" )
+		$request.getContextPath()$link
+	#else
+		/
+	#end
+#end
+
+
+#macro(getUserKMLink $username)
+	http://km.oa.com/user/$username
+#end
+
+#macro(getUserAvatar $username)
+	http://dayu.oa.com/avatars/$username/profile.jpg
+#end
+
+#macro(getBookDetailLink $bookId)
+	$request.getContextPath()/book/$!{bookId}
+#end
+
+
+#macro(getUserRTXLink $username)
+	RTXLite.HotLink://UserName=$!username
+#end
+
+#macro(showPaginator $page)
+    <div id="paginator"></div>
+	<form id="form-paginator" style="display:none;" method="POST">
+		<input type="hidden" id="pageIndex" name="pageIndex"/>
+		<input type="hidden" id="pageSize" name="pageSize"/>
+	</form>
+    <script type='text/javascript'>
+        var options = {
+            currentPage: $page.pageIndex,
+            totalPages: $page.pageCount,
+    		numberOfPages: '$!{page.pageSize}' || 10,
+    		size: "small",
+    		alignment: "right",
+			itemContainerClass: function (type, page, current) {
+                return (page === current) ? "active" : "pointer-cursor";
+            },
+    		onPageClicked: function(e,originalEvent,type,page){
+    			$('#pageIndex').val(page)
+        		$('#pageSize').val('$!{page.pageSize}' || 10)
+        		$("#form-paginator").submit()
+            }
+        }
+    
+        $('#paginator').bootstrapPaginator(options);
+    	// 增加totalRecord信息
+    	$("#paginator>ul").append('<li><a href="javascript:void(0);">共$page.pageCount页, $page.recordCount条记录</a></li>');
+    	
+    </script>
+#end

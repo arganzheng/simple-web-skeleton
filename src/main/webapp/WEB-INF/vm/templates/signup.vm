@@ -1,0 +1,18 @@
+#set( $layout = "layout/default.vm" )
+
+<div class="container">
+	 #if($!error)
+		<div class="alert alert-error">
+			<button type="button" class="close" data-dismiss="alert">×</button>
+			$error！为了线下能够联系，请务必使用你的<b> RTX </b>名称注册！
+		</div>
+	 #end
+     <form class="form-signin" method="POST">
+        <h2 class="form-signin-heading">注册账户</h2>
+		<div class="alert alert-error"><b>注意</b>&nbsp;为了线下能够联系，请务必使用<b> RTX </b>名称注册！</div>
+        <input type="text" name="username" class="input-block-level" placeholder="Username">
+        <input type="password" name="password" class="input-block-level" placeholder="Password">
+        <button class="btn btn-success" type="submit">注册</button>
+     </form>
+
+</div> <!-- /container -->

@@ -1,0 +1,25 @@
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<meta name="author" content="arganzheng">
+    <meta name="description" content="reading">
+
+	#if($title)
+	<title>$title</title>
+	#else
+	<title>Reading</title>
+	#end
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	<script type="text/javascript">
+        contextPath="$request.getContextPath()";
+    </script>
+	<link rel="stylesheet" type="text/css" href="$request.getContextPath()/resources/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="$request.getContextPath()/resources/reading/css/reading.css">
+		
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>	
+	<script src="$request.getContextPath()/resources/reading/js/common.js"></script>
+	
+</head>
